@@ -6,8 +6,10 @@ auth.onAuthStateChanged((user) => {
       .get()
       .then((snapshot) => {
         setupMentors(snapshot.docs);
+        setupUI(user);
       });
   } else {
+    setupUI();
     setupMentors([]);
   }
 });
