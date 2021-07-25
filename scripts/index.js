@@ -2,10 +2,11 @@ const mentorList = document.querySelector(".mentors");
 
 // setup Mentors
 const setupMentors = (data) => {
-  let html = "";
-  data.forEach((doc) => {
-    const mentor = doc.data();
-    const li = `
+  if (data.length) {
+    let html = "";
+    data.forEach((doc) => {
+      const mentor = doc.data();
+      const li = `
     <li>
     <div class="collapsible-header grey lighten-4">${mentor.first_name}</div>
     <div class="collapsible-body white">${mentor.ethnicity}</div>
@@ -13,9 +14,13 @@ const setupMentors = (data) => {
     <div class="collapsible-body white">${mentor.mobile_phone_number}</div>
     </li>
     `;
-    html += li;
-  });
-  mentorList.innerHTML = html;
+      html += li;
+    });
+    mentorList.innerHTML = html;
+  } else {
+    mentorList.innerHTML =
+      '<h5 class="center-align">Login to view mentors</h5>';
+  }
 };
 
 // setup materialize components
