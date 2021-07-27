@@ -14,6 +14,29 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
+// create new mentor
+const createForm = document.querySelector("#create-form");
+createForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  db.collection("mentors")
+    .add({
+      first_name: createForm["first_name"].value,
+      ethnicity: createForm["ethnicity"].value,
+      phone: createForm["phone"].value,
+      email: createForm["email"].value,
+    })
+    .then(() => {
+      // close modal and reset form
+      const modal = document.querySelector("#modal-create");
+      M.Modal.getInstance(modal).close();
+      createForm.reset();
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+});
+
 // sign up
 const signupForm = document.querySelector("#signup-form");
 signupForm.addEventListener("submit", (e) => {
