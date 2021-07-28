@@ -2,12 +2,10 @@
 auth.onAuthStateChanged((user) => {
   if (user) {
     // get data
-    db.collection("mentors")
-      .get()
-      .then((snapshot) => {
-        setupMentors(snapshot.docs);
-        setupUI(user);
-      });
+    db.collection("mentors").onSnapshot((snapshot) => {
+      setupMentors(snapshot.docs);
+      setupUI(user);
+    });
   } else {
     setupUI();
     setupMentors([]);
