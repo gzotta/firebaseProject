@@ -11,11 +11,13 @@ exports.addAdminRole = functions.https.onCall((data, context) => {
       return admin.auth().setCustomUserClaims(user.uid, {
         admin: true,
       });
-    }).then(() => {
-resturn {
-    message: `success! ${data.email} has been made an admin`
-}
-    }).catch (err => {
-        return err;
     })
+    .then(() => {
+      return {
+        message: `success! ${data.email} has been made an admin`,
+      };
+    })
+    .catch((err) => {
+      return err;
+    });
 });
