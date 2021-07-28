@@ -1,13 +1,28 @@
 const mentorList = document.querySelector(".mentors");
 const loggedOutLinks = document.querySelectorAll(".logged-out");
 const loggedInLinks = document.querySelectorAll(".logged-in");
+const accountDetails = document.querySelector(".account-details");
 
 const setupUI = (user) => {
   if (user) {
+    // account info
+    db.collection("users")
+      .doc(user.uid)
+      .get()
+      .then((doc) => {
+        const html = `
+      <div>Logged in as ${user.email}</div>
+      <div>${doc.data().bio}</div>
+      `;
+        accountDetails.innerHTML = html;
+      });
+
     //toggle UI elements
     loggedInLinks.forEach((item) => (item.style.display = "block"));
     loggedOutLinks.forEach((item) => (item.style.display = "none"));
   } else {
+    // hide account info
+    accountDetails.innerHTML = "";
     //toggle UI elements
     loggedInLinks.forEach((item) => (item.style.display = "none"));
     loggedOutLinks.forEach((item) => (item.style.display = "block"));
@@ -25,7 +40,7 @@ const setupMentors = (data) => {
     <div class="collapsible-header grey lighten-4">${mentor.first_name}</div>
     <div class="collapsible-body white">${mentor.ethnicity}</div>
     <div class="collapsible-body white">${mentor.email}</div>
-    <div class="collapsible-body white">${mentor.mobile_phone_number}</div>
+    <div class="collapsible-body white">${mentor.phone}</div>
     </li>
     `;
       html += li;

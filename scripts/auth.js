@@ -2,10 +2,15 @@
 auth.onAuthStateChanged((user) => {
   if (user) {
     // get data
-    db.collection("mentors").onSnapshot((snapshot) => {
-      setupMentors(snapshot.docs);
-      setupUI(user);
-    });
+    db.collection("mentors").onSnapshot(
+      (snapshot) => {
+        setupMentors(snapshot.docs);
+        setupUI(user);
+      },
+      (err) => {
+        console.log(err.message);
+      }
+    );
   } else {
     setupUI();
     setupMentors([]);
@@ -21,8 +26,8 @@ createForm.addEventListener("submit", (e) => {
     .add({
       first_name: createForm["first_name"].value,
       ethnicity: createForm["ethnicity"].value,
-      phone: createForm["phone"].value,
       email: createForm["email"].value,
+      phone: createForm["phone"].value,
     })
     .then(() => {
       // close modal and reset form
@@ -45,11 +50,18 @@ signupForm.addEventListener("submit", (e) => {
   const password = signupForm["signup-password"].value;
 
   // sign up the user
-  auth.createUserWithEmailAndPassword(email, password).then((cred) => {
-    const modal = document.querySelector("#modal-signup");
-    M.Modal.getInstance(modal).close();
-    signupForm.reset();
-  });
+  auth
+    .createUserWithEmailAndPassword(email, password)
+    .then((cred) => {
+      return db.collection("users").doc(cred.user.uid).set({
+        bio: signupForm["signup-bio"].value,
+      });
+    })
+    .then(() => {
+      const modal = document.querySelector("#modal-signup");
+      M.Modal.getInstance(modal).close();
+      signupForm.reset();
+    });
 });
 
 // logout
